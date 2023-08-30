@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="w-full h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
+    <div class="flex flex-row w-full backdrop-blur-md bg-white/60 p-3">
+        <div>Hello <span class="text-purple-500">{{ user.first_name }}</span></div>
+        <a class="ml-auto text-blue-700 underline" href="{% url 'todoapp:logout' %}">logout</a>
+    </div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/2 h-1/2 bg-white rounded">
+        <p class="h-1/4 m-2 text-3xl text-center text-blue-700">Todo items</p>
+        {% if not items %}
+        <div class="h-1/2 w-full text-gray-300 text-center text-4xl">
+            Not items
+        </div>
+        {% else %}
+            <div class="h-1/2 w-full flex flex-col overflow-y-scroll">
+            {% for item in items %}
+                <div class="flex flex-row">
+                <div class="ml-1">{{ item.text }}</div>
+                <a class="ml-auto mt-1 mr-5 p-1 text-white bg-blue-500" href="{% url 'todoapp:deletetodo' item.id %}">delete</a>
+                </div>
+            {% endfor %}
+            </div>
+        {% endif %}
+        
+        <div class="flex justify-center h-1/4">
+            <form method="POST" action="{% url 'todoapp:addtodo' %}">
+                {% csrf_token %}
+                <input class="b-gray-300 border-b-2 border-blue-700" name="text" type="text" placeholder="add new todo item">
+                <input class="bg-blue-500 rounded p-1 text-white" type="submit" value="Add">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
